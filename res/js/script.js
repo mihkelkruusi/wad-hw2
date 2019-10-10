@@ -17,6 +17,13 @@ $(function () {
         $("#profile-container").addClass("active");
     });
 
+    $("#add-course-button").click(function () {
+        if ($("#add-course").css("display") == "none")
+            $("#add-course").css("display", "inline");
+        else
+            $("#add-course").css("display", "none");
+    });
+
     $("#courses-button").click(function () {
         // Make the profile container unactive
         $("#profile-container").removeClass("active");
