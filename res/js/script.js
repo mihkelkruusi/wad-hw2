@@ -30,15 +30,22 @@ $(function () {
 
     $("#add-course-button").click(function () {
         //shows or hides the course adding form
-        if ($("#add-course").css("display") == "none")
-            $("#add-course").css("display", "inline");
+        let addCourse = $("#add-course");
+        if (addCourse.css("display") === "none"){
+            addCourse.css("display", "inline");
+        }
         else
-            $("#add-course").css("display", "none");
+            addCourse.css("display", "none");
     });
 
     $("#save-course").click(function () {
         addCourse(new Course($("#title").val(),$("#semester").val(),$("#grade").val()));
         updateGPA(user,courses);
+        $(".input").val('');
+        $("#add-course").css("display", "none");
+    });
+
+    $("#cancel-course").click(function () {
         $(".input").val('');
         $("#add-course").css("display", "none");
     });
@@ -67,32 +74,41 @@ $(function () {
             $("#courses tbody").append(tr);
         }
 
+        updateGPA(user, courses);
+
     }
 
     function addCourse(course) {
-        courses.push(course)
-        let tr = $("<tr></tr>");
-        let id = $("<td></td>").text(courses.length);
-        let title = $("<td></td>").text(course.title);
-        let semester = $("<td></td>").text(course.semester);
-        let grade = $("<td></td>").text(course.grade);
-        tr.append(id);
-        tr.append(title);
-        tr.append(semester);
-        tr.append(grade);
-        $("#courses tbody").append(tr);
+        if(/[0-9]{1,200}/.test(courses.length.toString()) && /.{1,100}/.test(course.title) && /[1-8]/.test(course.semester) && /[0-9]{1,3}/.test(course.grade)) {
+            courses.push(course)
+            let tr = $("<tr></tr>");
+            let id = $("<td></td>").text(courses.length);
+            let title = $("<td></td>").text(course.title);
+            let semester = $("<td></td>").text(course.semester);
+            let grade = $("<td></td>").text(course.grade);
+            tr.append(id);
+            tr.append(title);
+            tr.append(semester);
+            tr.append(grade);
+            $("#courses tbody").append(tr);
+        }
     }
     function updateGPA(user, courses) {
-        let gpa = 0;
-        for (let i = 0; i < courses.length; i++) {
-            if (courses[i].grade > 90)  gpa  += 5;
-            else if (courses[i].grade > 80)  gpa  += 4;
-            else if (courses[i].grade > 70)  gpa  += 3;
-            else if (courses[i].grade > 60)  gpa  += 2;
-            else if (courses[i].grade > 50)  gpa  += 1;
-        }
-        gpa = Math.round(10*gpa/courses.length)/10;
-        user.gpa = gpa;
+        user.gpa = calculateGPA(courses);
         $("#gpa strong").text(user.gpa);
     }
+
+    function calculateGPA(courses) {
+        let gpa = 0;
+        for (let i = 0; i < courses.length; i++) {
+            if (courses[i].grade > 90)  gpa  += 4;
+            else if (courses[i].grade > 80)  gpa  += 3;
+            else if (courses[i].grade > 70)  gpa  += 2;
+            else if (courses[i].grade > 60)  gpa  += 1;
+            else if (courses[i].grade > 50)  gpa  += 0.5;
+        }
+
+        return Math.round(10*gpa/courses.length)/10;
+    }
+
 });
