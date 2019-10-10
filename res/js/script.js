@@ -13,8 +13,19 @@ $(function () {
     $("#profile-button").click(function () {
         // Make the courses container unactive
         $("#courses-container").removeClass("active");
+        $("#courses-button").removeClass("active");
         // Make the profile container active
         $("#profile-container").addClass("active");
+        $("#profile-button").addClass("active");
+    });
+
+    $("#courses-button").click(function () {
+        // Make the profile container unactive
+        $("#profile-container").removeClass("active");
+        $("#profile-button").removeClass("active");
+        // Make the courses container active
+        $("#courses-container").addClass("active");
+        $("#courses-button").addClass("active");
     });
 
     $("#add-course-button").click(function () {
@@ -22,13 +33,6 @@ $(function () {
             $("#add-course").css("display", "inline");
         else
             $("#add-course").css("display", "none");
-    });
-
-    $("#courses-button").click(function () {
-        // Make the profile container unactive
-        $("#profile-container").removeClass("active");
-        // Make the courses container active
-        $("#courses-container").addClass("active");
     });
 
     function init() {
